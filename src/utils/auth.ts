@@ -1,5 +1,6 @@
 import { LoginCredentials, SignupCredentials } from "../lib/types";
 import { api } from "../services/api";
+import { toastError, toastSuccess } from "./toaster";
 
 export const isAuthenticated = (): boolean => {
   return localStorage.getItem("token") !== null;
@@ -8,23 +9,28 @@ export const isAuthenticated = (): boolean => {
 export const login = async (credentials: LoginCredentials) => {
   try {
     const response = await api.login(credentials);
+    toastSuccess("Logged in successfully!");
     return response.user;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    toastError("Login failed! Reason: " + error);
+    throw new Error(error);
   }
 };
 
 export const signup = async (credentials: SignupCredentials) => {
   try {
     const response = await api.signup(credentials);
+    toastSuccess("Registration successful!");
     return response.user;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    toastError("Registration failed! Reason: " + error);
+    throw new Error(error);
   }
 };
 
 export const logout = async () => {
   await api.logout();
+  toastSuccess("Logged out successfully!");
 };
 
 export const getCurrentUser = async () => {
