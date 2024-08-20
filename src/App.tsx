@@ -16,6 +16,7 @@ import DashboardPage from "./pages/DashboardPage";
 import SuppliersPage from "./pages/SuppliersPage";
 import { LoginPage, SignupPage } from "./pages/auth";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NotFoundPage from "./pages/NotFound";
 
 const App: React.FC = () => {
   return (
@@ -37,7 +38,7 @@ const App: React.FC = () => {
               <Route path="/suppliers" element={<SuppliersPage />} />
             </Route>
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </ThemeProvider>
