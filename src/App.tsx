@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
   Outlet,
 } from "react-router-dom";
 
@@ -12,9 +11,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme/theme";
 
 import DashboardLayout from "./layouts/DashboardLayout";
-import DashboardPage from "./pages/DashboardPage";
-import SuppliersPage from "./pages/SuppliersPage";
-import { LoginPage, SignupPage } from "./pages/auth";
+import DashboardPage from "./pages/Dashboard";
+import SuppliersPage from "./pages/Suppliers";
+import { LoginPage, SignupPage } from "./pages/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFound";
 
