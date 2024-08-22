@@ -9,11 +9,15 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../utils/auth";
+
 import { LoginCredentials } from "../../lib/types";
-import { regex } from "../../constants/regex";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "../../schemas/authSchema";
 
 export const LoginPage: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginCredentials>();
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginCredentials>({
+    resolver: zodResolver(loginSchema),
+  });
   const navigate = useNavigate();
 
   const onSubmit = async (data: LoginCredentials) => {
@@ -46,12 +50,7 @@ export const LoginPage: React.FC = () => {
             type="email"
             autoComplete="email"
             autoFocus
-            {...register("email", {
-              required: "Email is a required field!", pattern: {
-                value: regex.email,
-                message: "Please enter a valid email address!",
-              },
-            },)}
+            {...register("email")}
             error={!!errors.email}
             helperText={errors.email?.message}
           />
@@ -63,17 +62,7 @@ export const LoginPage: React.FC = () => {
             label="Password"
             type="password"
             autoComplete="current-password"
-            {...register("password", {
-              required: "Password is a required field!",
-              minLength: {
-                value: 8,
-                message: "Password must be of at least 8 characters."
-              },
-              pattern: {
-                value: regex.password,
-                message: 'Password should contain at least a uppercase, lowercase letter, special character and a number!',
-              }
-            })}
+            {...register("password")}
             error={!!errors.password}
             helperText={errors.password?.message}
           />

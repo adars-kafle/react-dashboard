@@ -10,10 +10,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../../utils/auth";
 import { useForm } from "react-hook-form";
 import { SignupCredentials } from "../../lib/types";
-import { regex } from "../../constants/regex";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema } from "../../schemas/authSchema";
 
 export const SignupPage: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupCredentials>();
+  const { register, handleSubmit, formState: { errors } } = useForm<SignupCredentials>({
+    resolver: zodResolver(signupSchema),
+  });
   const navigate = useNavigate();
 
   const onSubmit = async (data: SignupCredentials) => {
@@ -43,9 +46,7 @@ export const SignupPage: React.FC = () => {
             label="Full Name"
             autoComplete="name"
             autoFocus
-            {...register("name", {
-              required: "Name is a required field!",
-            })}
+            {...register("name",)}
             error={!!errors.name}
             helperText={errors.name?.message}
           />
@@ -57,12 +58,7 @@ export const SignupPage: React.FC = () => {
             type="email"
             label="Email Address"
             autoComplete="email"
-            {...register("email", {
-              required: "Email is a required field!", pattern: {
-                value: regex.email,
-                message: "Please enter a valid email address!",
-              },
-            },)}
+            {...register("email")}
             error={!!errors.email}
             helperText={errors.email?.message}
           />
@@ -74,18 +70,7 @@ export const SignupPage: React.FC = () => {
             type="password"
             id="password"
             autoComplete="new-password"
-            {
-            ...register("password", {
-              required: "Password is a required field!", minLength: {
-                value: 8,
-                message: "Password should consist of 8 characters!"
-              },
-              pattern: {
-                value: regex.password,
-                message: 'Password should contain at least a uppercase, lowercase letter, special character and a number!',
-              },
-            })
-            }
+            {...register("password")}
             error={!!errors.password}
             helperText={errors.password?.message}
           />
