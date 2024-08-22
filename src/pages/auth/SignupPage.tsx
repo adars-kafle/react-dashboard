@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -6,30 +5,22 @@ import {
   Typography,
   Container,
   Link as MuiLink,
-  Alert,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../../utils/auth";
+import { useForm } from "react-hook-form";
+import { SignupCredentials } from "../../lib/types";
 
 export const SignupPage: React.FC = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const { register, handleSubmit, formState: { errors } } = useForm<SignupCredentials>();
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError("");
-    try {
-      const credentials = { name, email, password };
-      await signup(credentials);
-      navigate("/");
-    } catch (err) {
-      setError("Failed to create an account. Please try again.");
-    }
-  };
-
+  const onSubmit = async (data: SignupCredentials) => {
+    await signup(data).then(response => {
+      console.log("Response: ", response);
+      navigate("/login");
+    }).then(err => console.log(err));
+  }
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -43,46 +34,59 @@ export const SignupPage: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        {error && (
-          <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
-            {error}
-          </Alert>
-        )}
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 3 }}>
           <TextField
             margin="normal"
             required
             fullWidth
-            id="name"
             label="Full Name"
-            name="name"
             autoComplete="name"
             autoFocus
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            {...register("name", {
+              required: "Name is a required field!",
+            })}
+            error={!!errors.name}
+            helperText={errors.name?.message}
           />
           <TextField
             margin="normal"
             required
             fullWidth
             id="email"
+            type="email"
             label="Email Address"
-            name="email"
             autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email", {
+              required: "Email is a required field!", pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                message: "Please enter a valid email address!",
+              },
+            },)}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
           <TextField
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {
+            ...register("password", {
+              required: "Password is a required field!", minLength: {
+                value: 8,
+                message: "Password should consist of 8 characters!"
+              },
+              pattern: {
+                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                message: 'Password should contain at least a uppercase, lowercase letter, special character and a number!',
+              },
+            })
+            }
+            error={!!errors.password}
+            helperText={errors.password?.message}
           />
           <Button
             type="submit"
