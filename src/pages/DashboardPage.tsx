@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Container, Stack, Typography, useTheme } from "@mui/material";
+import { Container, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { StyledModuleBox } from "./styles";
 
 type ModulesProps = {
   title: string;
@@ -22,8 +23,6 @@ const modules: ModulesProps[] = [
 ];
 
 const DashboardPage: React.FC = () => {
-  const theme = useTheme();
-
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h4" fontWeight={600} mb={4}>
@@ -35,36 +34,16 @@ const DashboardPage: React.FC = () => {
         alignItems="stretch"
       >
         {modules.map((module) => (
-          <Box
-            key={module.title}
-            component={Link}
-            to={module.href}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              padding: "20px",
-              borderRadius: "12px",
-              backgroundColor: theme.palette.background.paper,
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-              textDecoration: "none",
-              transition: "transform 0.3s, box-shadow 0.3s",
-              "&:hover": {
-                transform: "translateY(-5px)",
-                boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.15)",
-              },
-              "& h5": {
-                color: theme.palette.primary.main,
-              },
-            }}
-          >
-            <Typography variant="h5" fontWeight={600}>
-              {module.title}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" mt={2}>
-              {module.description}
-            </Typography>
-          </Box>
+          <Link key={module.title} to={module.href} style={{ textDecoration: 'none' }}>
+            <StyledModuleBox>
+              <Typography variant="h5" fontWeight={600}>
+                {module.title}
+              </Typography>
+              <Typography variant="body2" mt={2}>
+                {module.description}
+              </Typography>
+            </StyledModuleBox>
+          </Link>
         ))}
       </Stack>
     </Container>
