@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../utils/auth";
 import { LoginCredentials } from "../../lib/types";
+import { regex } from "../../constants/regex";
 
 export const LoginPage: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginCredentials>();
@@ -47,7 +48,7 @@ export const LoginPage: React.FC = () => {
             autoFocus
             {...register("email", {
               required: "Email is a required field!", pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                value: regex.email,
                 message: "Please enter a valid email address!",
               },
             },)}
@@ -69,7 +70,7 @@ export const LoginPage: React.FC = () => {
                 message: "Password must be of at least 8 characters."
               },
               pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                value: regex.password,
                 message: 'Password should contain at least a uppercase, lowercase letter, special character and a number!',
               }
             })}

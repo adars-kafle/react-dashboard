@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../../utils/auth";
 import { useForm } from "react-hook-form";
 import { SignupCredentials } from "../../lib/types";
+import { regex } from "../../constants/regex";
 
 export const SignupPage: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<SignupCredentials>();
@@ -58,7 +59,7 @@ export const SignupPage: React.FC = () => {
             autoComplete="email"
             {...register("email", {
               required: "Email is a required field!", pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                value: regex.email,
                 message: "Please enter a valid email address!",
               },
             },)}
@@ -80,7 +81,7 @@ export const SignupPage: React.FC = () => {
                 message: "Password should consist of 8 characters!"
               },
               pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                value: regex.password,
                 message: 'Password should contain at least a uppercase, lowercase letter, special character and a number!',
               },
             })
