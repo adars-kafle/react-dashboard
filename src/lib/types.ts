@@ -21,3 +21,10 @@ export type Supplier = {
   email: string;
   phone: string;
 };
+
+export type AuthContext = {
+  user: User | null;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  signup: (credentials: SignupCredentials) => Promise<void>;
+  logout: () => void;
+}

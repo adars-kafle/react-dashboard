@@ -7,13 +7,14 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../../utils/auth";
 import { useForm } from "react-hook-form";
 import { SignupCredentials } from "../../lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../../schemas/authSchema";
+import { useAuth } from "../../hooks/useAuth";
 
 export const SignupPage: React.FC = () => {
+  const { signup } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm<SignupCredentials>({
     resolver: zodResolver(signupSchema),
   });

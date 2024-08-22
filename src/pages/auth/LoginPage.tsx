@@ -8,13 +8,15 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../utils/auth";
 
 import { LoginCredentials } from "../../lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schemas/authSchema";
 
+import { useAuth } from "../../hooks/useAuth";
+
 export const LoginPage: React.FC = () => {
+  const { login } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginCredentials>({
     resolver: zodResolver(loginSchema),
   });
