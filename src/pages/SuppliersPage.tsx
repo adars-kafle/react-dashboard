@@ -26,12 +26,14 @@ import { dummyData } from "../services/suppliersData";
 const SuppliersPage: React.FC = () => {
   const [data, setData] = useState<Supplier[]>(dummyData);
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [newSupplier, setNewSupplier] = useState<Omit<Supplier, "id">>({
     name: "",
     address: "",
     email: "",
     phone: "",
   });
+  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -49,8 +51,16 @@ const SuppliersPage: React.FC = () => {
     handleClose();
   };
 
+  // For the edit button in the table row
   const handleEditSupplier = (row: MRT_Row<Supplier>) => {
-    console.log("Edit supplier:", row.original);
+    setEditingSupplier(row.original);
+    setNewSupplier({
+      name: row.original.name,
+      address: row.original.address,
+      email: row.original.email,
+      phone: row.original.phone,
+    })
+    setEditOpen(true);
   };
 
   const handleDeleteSupplier = (row: MRT_Row<Supplier>) => {
@@ -66,6 +76,21 @@ const SuppliersPage: React.FC = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setNewSupplier({ ...newSupplier, [name]: value });
+  };
+
+  // For the update button of the modal
+  const handleUpdateSupplier = () => {
+    if (editingSupplier) {
+      const updatedData = data.map((supplier) =>
+        supplier.id === editingSupplier.id
+          ? { ...supplier, ...newSupplier }
+          : supplier
+      );
+      setData(updatedData);
+      setEditOpen(false);
+      setEditingSupplier(null);
+      setNewSupplier({ name: "", address: "", email: "", phone: "" });
+    }
   };
 
   const columns = useMemo<MRT_ColumnDef<Supplier>[]>(
@@ -212,6 +237,60 @@ const SuppliersPage: React.FC = () => {
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleAddSupplier} variant="contained">
             Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit Supplier Dialog */}
+      <Dialog open={editOpen} onClose={() => setEditOpen(false)}>
+        <DialogTitle>Edit Supplier</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="name"
+            label="Supplier Name"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={newSupplier.name}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="address"
+            label="Address"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={newSupplier.address}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="email"
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            value={newSupplier.email}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="phone"
+            label="Phone"
+            type="tel"
+            fullWidth
+            variant="outlined"
+            value={newSupplier.phone}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditOpen(false)}>Cancel</Button>
+          <Button onClick={handleUpdateSupplier} variant="contained">
+            Update
           </Button>
         </DialogActions>
       </Dialog>
