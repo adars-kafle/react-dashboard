@@ -1,10 +1,16 @@
-import React, { useMemo, useState } from "react";
+import React, { lazy, Suspense, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
   type MRT_Row,
 } from "material-react-table";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -12,7 +18,8 @@ import {
 } from "@mui/icons-material";
 import { Supplier } from "../../lib/types";
 import { dummyData } from "../../services/suppliersData";
-import SupplierModal from "./components/SupplierModal";
+
+const SupplierModal = lazy(() => import("./components/SupplierModal"));
 
 const SuppliersPage: React.FC = () => {
   const [data, setData] = useState<Supplier[]>(dummyData);
@@ -60,8 +67,7 @@ const SuppliersPage: React.FC = () => {
   };
 
   const handleDeleteSupplier = (row: MRT_Row<Supplier>) => {
-    const flag = confirm("Are you sure?");
-    if (flag) {
+    if (confirm("Are you sure?")) {
       setData((prev) =>
         prev.filter((supplier) => supplier.id !== row.original.id)
       );
@@ -170,14 +176,16 @@ const SuppliersPage: React.FC = () => {
         }}
       />
 
-      <SupplierModal
-        open={modalOpen}
-        isEditing={isEditing}
-        supplier={currentSupplier}
-        onClose={handleCloseModal}
-        onSave={handleSaveSupplier}
-        onInputChange={handleInputChange}
-      />
+      <Suspense fallback={<CircularProgress />}>
+        <SupplierModal
+          open={modalOpen}
+          isEditing={isEditing}
+          supplier={currentSupplier}
+          onClose={handleCloseModal}
+          onSave={handleSaveSupplier}
+          onInputChange={handleInputChange}
+        />
+      </Suspense>
     </Box>
   );
 };
