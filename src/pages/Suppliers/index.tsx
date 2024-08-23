@@ -51,6 +51,7 @@ const SuppliersPage: React.FC = () => {
     handleClose();
   };
 
+  // For the edit button in the table row
   const handleEditSupplier = (row: MRT_Row<Supplier>) => {
     setEditingSupplier(row.original);
     setNewSupplier({
@@ -58,7 +59,7 @@ const SuppliersPage: React.FC = () => {
       address: row.original.address,
       email: row.original.email,
       phone: row.original.phone,
-    })
+    });
     setEditOpen(true);
   };
 
