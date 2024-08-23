@@ -11,21 +11,31 @@ import { useForm } from "react-hook-form";
 import { SignupCredentials } from "../../lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../../schemas/authSchema";
-import { useAuth } from "../../hooks/useAuth";
+import { signup } from "../../utils/auth";
 
 export const SignupPage: React.FC = () => {
-  const { signup } = useAuth();
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupCredentials>({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<SignupCredentials>({
     resolver: zodResolver(signupSchema),
   });
+
+  console.log("erros", errors);
+  console.log("consoe", getValues("email"));
   const navigate = useNavigate();
 
   const onSubmit = async (data: SignupCredentials) => {
-    await signup(data).then(response => {
-      console.log("Response: ", response);
-      navigate("/login");
-    }).then(err => console.log(err));
-  }
+    await signup(data)
+      .then((response) => {
+        console.log("Response: ", response);
+        navigate("/login");
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -39,7 +49,12 @@ export const SignupPage: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 3 }}
+        >
           <TextField
             margin="normal"
             required
@@ -47,7 +62,7 @@ export const SignupPage: React.FC = () => {
             label="Full Name"
             autoComplete="name"
             autoFocus
-            {...register("name",)}
+            {...register("name")}
             error={!!errors.name}
             helperText={errors.name?.message}
           />

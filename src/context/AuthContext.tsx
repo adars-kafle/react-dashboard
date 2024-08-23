@@ -1,42 +1,35 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { type User, type LoginCredentials, type SignupCredentials, type AuthContext as AuthContextType } from "../lib/types";
-import { login as loginApi, signup as signupApi, logout as logoutApi, getCurrentUser as getCurrentUserApi } from "../utils/auth";
+import { type User, type AuthContext as AuthContextType } from "../lib/types";
+import {
+  getCurrentUser as getCurrentUserApi,
+  logout as logoutApi,
+} from "../utils/auth";
 
 // Create the context
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 // Create the Provider Component
-export const AuthProvider = ({ children }: {
-    children: ReactNode
-}) => {
-    const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
 
-    const login = async (credentials: LoginCredentials) => {
-        const loggedInUser = await loginApi(credentials);
-        setUser(loggedInUser);
+  const logout = () => {
+    logoutApi();
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await getCurrentUserApi();
+      setUser(currentUser);
     };
+    fetchUser();
+  }, []);
 
-    const signup = async (credentials: SignupCredentials) => {
-        const newUser = await signupApi(credentials);
-        setUser(newUser);
-    };
-
-    const logout = () => {
-        logoutApi();
-        setUser(null);
-    }
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            const currentUser = await getCurrentUserApi();
-            setUser(currentUser);
-        }
-        fetchUser();
-    }, []);
-
-    return (
-        <AuthContext.Provider value={{ login, signup, logout, user }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={{ logout, user }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
