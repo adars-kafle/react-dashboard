@@ -10,11 +10,13 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme/theme";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import DashboardLayout from "./layouts/DashboardLayout";
+
 import DashboardPage from "./pages/Dashboard";
 import SuppliersPage from "./pages/Suppliers";
 import { LoginPage, SignupPage } from "./pages/Auth";
-import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFound";
 
 const App: React.FC = () => {

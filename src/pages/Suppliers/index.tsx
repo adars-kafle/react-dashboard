@@ -4,17 +4,7 @@ import {
   type MRT_ColumnDef,
   type MRT_Row,
 } from "material-react-table";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -22,50 +12,55 @@ import {
 } from "@mui/icons-material";
 import { Supplier } from "../../lib/types";
 import { dummyData } from "../../services/suppliersData";
+import SupplierModal from "./components/SupplierModal";
 
 const SuppliersPage: React.FC = () => {
   const [data, setData] = useState<Supplier[]>(dummyData);
-  const [open, setOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
-  const [newSupplier, setNewSupplier] = useState<Omit<Supplier, "id">>({
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentSupplier, setCurrentSupplier] = useState<
+    Supplier | Omit<Supplier, "id">
+  >({
     name: "",
     address: "",
     email: "",
     phone: "",
-  });
-  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
+  }); // Unified state for handling both editing and adding supplier
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpenModal = (supplier?: Supplier) => {
+    if (supplier) {
+      setCurrentSupplier(supplier);
+      setIsEditing(true);
+    } else {
+      setCurrentSupplier({ name: "", address: "", email: "", phone: "" });
+      setIsEditing(false);
+    }
+    setModalOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    setNewSupplier({ name: "", address: "", email: "", phone: "" });
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setCurrentSupplier({ name: "", address: "", email: "", phone: "" });
   };
 
-  const handleAddSupplier = () => {
-    const id = Math.max(...data.map((s) => s.id), 0) + 1;
-    const supplierToAdd = { id, ...newSupplier };
-    setData([...data, supplierToAdd]);
-    handleClose();
-  };
-
-  // For the edit button in the table row
-  const handleEditSupplier = (row: MRT_Row<Supplier>) => {
-    setEditingSupplier(row.original);
-    setNewSupplier({
-      name: row.original.name,
-      address: row.original.address,
-      email: row.original.email,
-      phone: row.original.phone,
-    });
-    setEditOpen(true);
+  const handleSaveSupplier = () => {
+    if (isEditing) {
+      setData((prevData) =>
+        prevData.map((supplier) =>
+          supplier.id === (currentSupplier as Supplier).id
+            ? { ...supplier, ...currentSupplier }
+            : supplier
+        )
+      );
+    } else {
+      const id = Math.max(...data.map((s) => s.id), 0) + 1;
+      setData([...data, { ...(currentSupplier as Supplier), id }]);
+    }
+    handleCloseModal();
   };
 
   const handleDeleteSupplier = (row: MRT_Row<Supplier>) => {
     const flag = confirm("Are you sure?");
-
     if (flag) {
       setData((prev) =>
         prev.filter((supplier) => supplier.id !== row.original.id)
@@ -75,22 +70,7 @@ const SuppliersPage: React.FC = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setNewSupplier({ ...newSupplier, [name]: value });
-  };
-
-  // For the update button of the modal
-  const handleUpdateSupplier = () => {
-    if (editingSupplier) {
-      const updatedData = data.map((supplier) =>
-        supplier.id === editingSupplier.id
-          ? { ...supplier, ...newSupplier }
-          : supplier
-      );
-      setData(updatedData);
-      setEditOpen(false);
-      setEditingSupplier(null);
-      setNewSupplier({ name: "", address: "", email: "", phone: "" });
-    }
+    setCurrentSupplier({ ...currentSupplier, [name]: value });
   };
 
   const columns = useMemo<MRT_ColumnDef<Supplier>[]>(
@@ -129,7 +109,7 @@ const SuppliersPage: React.FC = () => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={handleClickOpen}
+          onClick={() => handleOpenModal()}
         >
           Add Supplier
         </Button>
@@ -141,7 +121,10 @@ const SuppliersPage: React.FC = () => {
         positionActionsColumn="last"
         renderRowActions={({ row }) => (
           <Box sx={{ display: "flex", gap: "8px" }}>
-            <IconButton onClick={() => handleEditSupplier(row)} size="small">
+            <IconButton
+              onClick={() => handleOpenModal(row.original)}
+              size="small"
+            >
               <EditIcon fontSize="small" />
             </IconButton>
             <IconButton
@@ -187,113 +170,14 @@ const SuppliersPage: React.FC = () => {
         }}
       />
 
-      {/* Add Supplier Dialog */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add New Supplier</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="name"
-            label="Supplier Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.name}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="address"
-            label="Address"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.address}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="email"
-            label="Email"
-            type="email"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.email}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="phone"
-            label="Phone"
-            type="tel"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.phone}
-            onChange={handleInputChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAddSupplier} variant="contained">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Edit Supplier Dialog */}
-      <Dialog open={editOpen} onClose={() => setEditOpen(false)}>
-        <DialogTitle>Edit Supplier</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="name"
-            label="Supplier Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.name}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="address"
-            label="Address"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.address}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="email"
-            label="Email"
-            type="email"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.email}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="phone"
-            label="Phone"
-            type="tel"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.phone}
-            onChange={handleInputChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditOpen(false)}>Cancel</Button>
-          <Button onClick={handleUpdateSupplier} variant="contained">
-            Update
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <SupplierModal
+        open={modalOpen}
+        isEditing={isEditing}
+        supplier={currentSupplier}
+        onClose={handleCloseModal}
+        onSave={handleSaveSupplier}
+        onInputChange={handleInputChange}
+      />
     </Box>
   );
 };
