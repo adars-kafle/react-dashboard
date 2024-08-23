@@ -26,7 +26,6 @@ export const api = {
   signup: async (
     credentials: SignupCredentials
   ): Promise<{ token: string; user: User }> => {
-    console.log("HEREEE!");
     await delay(500);
 
     if (mockUsers.some((u) => u.email === credentials.email)) {
