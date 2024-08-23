@@ -24,5 +24,4 @@ export type Supplier = {
 
 export type AuthContext = {
   user: User | null;
-  logout: () => void;
 };
