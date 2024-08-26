@@ -59,6 +59,7 @@ export const LoginPage: React.FC = () => {
             id="email"
             label="Email Address"
             type="email"
+            value={"admin@gmail.com"}
             autoComplete="email"
             autoFocus
             {...register("email")}
@@ -71,6 +72,7 @@ export const LoginPage: React.FC = () => {
             fullWidth
             id="password"
             label="Password"
+            value={"Admin@1234"}
             type="password"
             autoComplete="current-password"
             {...register("password")}
