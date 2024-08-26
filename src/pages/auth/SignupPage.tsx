@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -6,28 +5,35 @@ import {
   Typography,
   Container,
   Link as MuiLink,
-  Alert,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { SignupCredentials } from "../../lib/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema } from "../../schemas/authSchema";
 import { signup } from "../../utils/auth";
 
 export const SignupPage: React.FC = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<SignupCredentials>({
+    resolver: zodResolver(signupSchema),
+  });
+
+  console.log("erros", errors);
+  console.log("consoe", getValues("email"));
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError("");
-    try {
-      const credentials = { name, email, password };
-      await signup(credentials);
-      navigate("/");
-    } catch (err) {
-      setError("Failed to create an account. Please try again.");
-    }
+  const onSubmit = async (data: SignupCredentials) => {
+    await signup(data)
+      .then((response) => {
+        console.log("Response: ", response);
+        navigate("/login");
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -43,46 +49,46 @@ export const SignupPage: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        {error && (
-          <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
-            {error}
-          </Alert>
-        )}
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 3 }}
+        >
           <TextField
             margin="normal"
             required
             fullWidth
-            id="name"
             label="Full Name"
-            name="name"
             autoComplete="name"
             autoFocus
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            {...register("name")}
+            error={!!errors.name}
+            helperText={errors.name?.message}
           />
           <TextField
             margin="normal"
             required
             fullWidth
             id="email"
+            type="email"
             label="Email Address"
-            name="email"
             autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
           <TextField
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
+            error={!!errors.password}
+            helperText={errors.password?.message}
           />
           <Button
             type="submit"

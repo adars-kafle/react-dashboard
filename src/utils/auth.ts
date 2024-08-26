@@ -12,7 +12,7 @@ export const login = async (credentials: LoginCredentials) => {
     toastSuccess("Logged in successfully!");
     return response.user;
   } catch (error: any) {
-    toastError("Login failed! Reason: " + error);
+    toastError("Login failed! " + error);
     throw new Error(error);
   }
 };

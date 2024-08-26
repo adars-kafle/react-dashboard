@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -6,27 +6,31 @@ import {
   Typography,
   Container,
   Link as MuiLink,
-  Alert,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+
+import { LoginCredentials } from "../../lib/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "../../schemas/authSchema";
 import { login } from "../../utils/auth";
 
 export const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginCredentials>({
+    resolver: zodResolver(loginSchema),
+  });
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError("");
-    try {
-      const credentials = { email, password };
-      await login(credentials);
-      navigate("/");
-    } catch (err) {
-      setError("Invalid email or password");
-    }
+  const onSubmit = async (data: LoginCredentials) => {
+    await login(data)
+      .then((response) => {
+        console.log("Response: ", response);
+        navigate("/");
+      })
+      .catch((err) => console.log("Error: ", err));
   };
 
   return (
@@ -42,35 +46,38 @@ export const LoginPage: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        {error && (
-          <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
-            {error}
-          </Alert>
-        )}
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <TextField
             margin="normal"
             required
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
+            type="email"
+            value={"admin@gmail.com"}
             autoComplete="email"
             autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
           <TextField
             margin="normal"
             required
             fullWidth
-            name="password"
-            label="Password"
-            type="password"
             id="password"
+            label="Password"
+            value={"Admin@1234"}
+            type="password"
             autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
+            error={!!errors.password}
+            helperText={errors.password?.message}
           />
           <Button
             type="submit"
@@ -78,7 +85,7 @@ export const LoginPage: React.FC = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Login
           </Button>
           <MuiLink component={Link} to="/signup" variant="body2">
             {"Don't have an account? Sign Up"}

@@ -5,6 +5,21 @@ export interface User {
   password: string;
 }
 
+export interface SupplierFormInputs {
+  name: string;
+  address: string;
+  email: string;
+  phone: string;
+}
+
+export interface AddSupplierModalProps {
+  open: boolean;
+  isEditing: boolean;
+  supplier: Supplier | Omit<Supplier, "id">;
+  onClose: () => void;
+  onSave: (data: SupplierFormInputs) => void;
+}
+
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -20,4 +35,8 @@ export type Supplier = {
   address: string;
   email: string;
   phone: string;
+};
+
+export type AuthContext = {
+  user: User | null;
 };
