@@ -10,12 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.0.14",
     "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
+    "@mui/x-date-pickers": "^7.14.0",
     "axios": "^1.7.4",
     "material-react-table": "^2.13.1",
     "react": "^18.3.1",
@@ -37,5 +38,8 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.2.0",
     "vite": "^5.4.1"
+  },
+  "resolutions": {
+    "@mui/x-date-pickers": "^6.0.0"
   }
 }

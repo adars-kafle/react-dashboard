@@ -3,5 +3,10 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@mui/x-date-pickers/*": ["./node_modules/@mui/x-date-pickers/*"]
+    }
+  }
 }
