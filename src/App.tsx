@@ -15,7 +15,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardPage from "./pages/Dashboard";
 import SuppliersPage from "./pages/Suppliers";
-import { LoginPage, SignupPage } from "./pages/Auth";
+import { LoginPage, SignupPage } from "./pages/Authentication";
 import NotFoundPage from "./pages/NotFound";
 
 const App: React.FC = () => {
