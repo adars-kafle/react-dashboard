@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { lazy, Suspense, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -7,12 +7,8 @@ import {
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
+  CircularProgress,
   IconButton,
-  TextField,
   Typography,
 } from "@mui/material";
 import {
@@ -20,52 +16,55 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
-import { Supplier } from "../lib/types";
-import { dummyData } from "../services/suppliersData";
+import { Supplier, SupplierFormInputs } from "../../lib/types";
+import { dummyData } from "../../services/suppliersData";
+
+const SupplierModal = lazy(() => import("./components/SupplierModal"));
 
 const SuppliersPage: React.FC = () => {
   const [data, setData] = useState<Supplier[]>(dummyData);
-  const [open, setOpen] = useState(false);
-  const [newSupplier, setNewSupplier] = useState<Omit<Supplier, "id">>({
-    name: "",
-    address: "",
-    email: "",
-    phone: "",
-  });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentSupplier, setCurrentSupplier] = useState<Supplier | null>(null);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpenModal = (supplier?: Supplier) => {
+    if (supplier) {
+      setCurrentSupplier(supplier);
+      setIsEditing(true);
+    } else {
+      setCurrentSupplier(null);
+      setIsEditing(false);
+    }
+    setModalOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    setNewSupplier({ name: "", address: "", email: "", phone: "" });
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setCurrentSupplier(null);
   };
 
-  const handleAddSupplier = () => {
-    const id = Math.max(...data.map((s) => s.id), 0) + 1;
-    const supplierToAdd = { id, ...newSupplier };
-    setData([...data, supplierToAdd]);
-    handleClose();
-  };
-
-  const handleEditSupplier = (row: MRT_Row<Supplier>) => {
-    console.log("Edit supplier:", row.original);
+  const handleSaveSupplier = (newSupplier: SupplierFormInputs) => {
+    if (isEditing && currentSupplier) {
+      setData((prevData) =>
+        prevData.map((supplier) =>
+          supplier.id === currentSupplier.id
+            ? { ...supplier, ...newSupplier }
+            : supplier
+        )
+      );
+    } else {
+      const id = Math.max(...data.map((s) => s.id), 0) + 1;
+      setData([...data, { ...newSupplier, id }]);
+    }
+    handleCloseModal();
   };
 
   const handleDeleteSupplier = (row: MRT_Row<Supplier>) => {
-    const flag = confirm("Are you sure?");
-
-    if (flag) {
+    if (confirm("Are you sure you want to delete this supplier?")) {
       setData((prev) =>
         prev.filter((supplier) => supplier.id !== row.original.id)
       );
     }
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setNewSupplier({ ...newSupplier, [name]: value });
   };
 
   const columns = useMemo<MRT_ColumnDef<Supplier>[]>(
@@ -104,7 +103,7 @@ const SuppliersPage: React.FC = () => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={handleClickOpen}
+          onClick={() => handleOpenModal()}
         >
           Add Supplier
         </Button>
@@ -116,7 +115,10 @@ const SuppliersPage: React.FC = () => {
         positionActionsColumn="last"
         renderRowActions={({ row }) => (
           <Box sx={{ display: "flex", gap: "8px" }}>
-            <IconButton onClick={() => handleEditSupplier(row)} size="small">
+            <IconButton
+              onClick={() => handleOpenModal(row.original)}
+              size="small"
+            >
               <EditIcon fontSize="small" />
             </IconButton>
             <IconButton
@@ -162,59 +164,17 @@ const SuppliersPage: React.FC = () => {
         }}
       />
 
-      {/* Add Supplier Dialog */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add New Supplier</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="name"
-            label="Supplier Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.name}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="address"
-            label="Address"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.address}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="email"
-            label="Email"
-            type="email"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.email}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="phone"
-            label="Phone"
-            type="tel"
-            fullWidth
-            variant="outlined"
-            value={newSupplier.phone}
-            onChange={handleInputChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAddSupplier} variant="contained">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Suspense fallback={<CircularProgress />}>
+        <SupplierModal
+          open={modalOpen}
+          isEditing={isEditing}
+          supplier={
+            currentSupplier || { name: "", address: "", email: "", phone: "" }
+          }
+          onClose={handleCloseModal}
+          onSave={handleSaveSupplier}
+        />
+      </Suspense>
     </Box>
   );
 };

@@ -8,24 +8,30 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../utils/auth";
 
 import { LoginCredentials } from "../../lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schemas/authSchema";
+import { login } from "../../utils/auth";
 
 export const LoginPage: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginCredentials>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginCredentials>({
     resolver: zodResolver(loginSchema),
   });
   const navigate = useNavigate();
 
   const onSubmit = async (data: LoginCredentials) => {
-    await login(data).then((response) => {
-      console.log("Response: ", response);
-      navigate("/");
-    }).catch((err) => console.log("Error: ", err));
-  }
+    await login(data)
+      .then((response) => {
+        console.log("Response: ", response);
+        navigate("/");
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -40,7 +46,12 @@ export const LoginPage: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <TextField
             margin="normal"
             required
