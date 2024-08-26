@@ -12,8 +12,8 @@ import theme from "./theme/theme";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import { LoginPage, SignupPage } from "./pages/Auth";
 import DashboardLayout from "./layouts/DashboardLayout";
-
 import DashboardPage from "./pages/Dashboard";
 import SuppliersPage from "./pages/Suppliers";
 import { LoginPage, SignupPage } from "./pages/Auth";
