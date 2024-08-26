@@ -5,11 +5,6 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ["@mui/x-date-pickers/DatePicker"],
-  },
-  build: {
-    rollupOptions: {
-      external: ["@mui/x-date-pickers/DatePicker"],
-    },
+    include: ["@mui/x-date-pickers/DatePicker", "@emotion/styled"],
   },
 });

@@ -11,9 +11,9 @@ export const login = async (credentials: LoginCredentials) => {
     const response = await api.login(credentials);
     toastSuccess("Logged in successfully!");
     return response.user;
-  } catch (error: any) {
+  } catch (error) {
     toastError("Login failed! " + error);
-    throw new Error(error);
+    throw new Error(error as string);
   }
 };
 
@@ -22,9 +22,9 @@ export const signup = async (credentials: SignupCredentials) => {
     const response = await api.signup(credentials);
     toastSuccess("Registration successful!");
     return response.user;
-  } catch (error: any) {
+  } catch (error) {
     toastError("Registration failed! Reason: " + error);
-    throw new Error(error);
+    throw new Error(error as string);
   }
 };
 
