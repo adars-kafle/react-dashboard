@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
   Outlet,
 } from "react-router-dom";
 
@@ -14,7 +13,7 @@ import theme from "./theme/theme";
 import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardPage from "./pages/DashboardPage";
 import SuppliersPage from "./pages/SuppliersPage";
-import { LoginPage, SignupPage } from "./pages/auth";
+import { LoginPage, SignupPage } from "./pages/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFound";
 
