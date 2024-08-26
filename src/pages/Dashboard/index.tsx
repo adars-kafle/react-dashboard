@@ -24,7 +24,7 @@ const modules: ModulesProps[] = [
 
 const DashboardPage: React.FC = () => {
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 5 }}>
       <Typography variant="h4" fontWeight={600} mb={4}>
         Welcome to the Dashboard
       </Typography>
@@ -34,7 +34,11 @@ const DashboardPage: React.FC = () => {
         alignItems="stretch"
       >
         {modules.map((module) => (
-          <Link key={module.title} to={module.href} style={{ textDecoration: 'none' }}>
+          <Link
+            key={module.title}
+            to={module.href}
+            style={{ textDecoration: "none" }}
+          >
             <StyledModuleBox>
               <Typography variant="h5" fontWeight={600}>
                 {module.title}
