@@ -16,7 +16,7 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
-import { Supplier } from "../../lib/types";
+import { Supplier, SupplierFormInputs } from "../../lib/types";
 import { dummyData } from "../../services/suppliersData";
 
 const SupplierModal = lazy(() => import("./components/SupplierModal"));
@@ -25,21 +25,14 @@ const SuppliersPage: React.FC = () => {
   const [data, setData] = useState<Supplier[]>(dummyData);
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentSupplier, setCurrentSupplier] = useState<
-    Supplier | Omit<Supplier, "id">
-  >({
-    name: "",
-    address: "",
-    email: "",
-    phone: "",
-  }); // Unified state for handling both editing and adding supplier
+  const [currentSupplier, setCurrentSupplier] = useState<Supplier | null>(null);
 
   const handleOpenModal = (supplier?: Supplier) => {
     if (supplier) {
       setCurrentSupplier(supplier);
       setIsEditing(true);
     } else {
-      setCurrentSupplier({ name: "", address: "", email: "", phone: "" });
+      setCurrentSupplier(null);
       setIsEditing(false);
     }
     setModalOpen(true);
@@ -47,36 +40,31 @@ const SuppliersPage: React.FC = () => {
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    setCurrentSupplier({ name: "", address: "", email: "", phone: "" });
+    setCurrentSupplier(null);
   };
 
-  const handleSaveSupplier = () => {
-    if (isEditing) {
+  const handleSaveSupplier = (newSupplier: SupplierFormInputs) => {
+    if (isEditing && currentSupplier) {
       setData((prevData) =>
         prevData.map((supplier) =>
-          supplier.id === (currentSupplier as Supplier).id
-            ? { ...supplier, ...currentSupplier }
+          supplier.id === currentSupplier.id
+            ? { ...supplier, ...newSupplier }
             : supplier
         )
       );
     } else {
       const id = Math.max(...data.map((s) => s.id), 0) + 1;
-      setData([...data, { ...(currentSupplier as Supplier), id }]);
+      setData([...data, { ...newSupplier, id }]);
     }
     handleCloseModal();
   };
 
   const handleDeleteSupplier = (row: MRT_Row<Supplier>) => {
-    if (confirm("Are you sure?")) {
+    if (confirm("Are you sure you want to delete this supplier?")) {
       setData((prev) =>
         prev.filter((supplier) => supplier.id !== row.original.id)
       );
     }
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setCurrentSupplier({ ...currentSupplier, [name]: value });
   };
 
   const columns = useMemo<MRT_ColumnDef<Supplier>[]>(
@@ -180,10 +168,11 @@ const SuppliersPage: React.FC = () => {
         <SupplierModal
           open={modalOpen}
           isEditing={isEditing}
-          supplier={currentSupplier}
+          supplier={
+            currentSupplier || { name: "", address: "", email: "", phone: "" }
+          }
           onClose={handleCloseModal}
           onSave={handleSaveSupplier}
-          onInputChange={handleInputChange}
         />
       </Suspense>
     </Box>
