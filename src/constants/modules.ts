@@ -1,4 +1,4 @@
-import { type ModulesProps } from "../lib/types";
+import { type ModulesProps } from "../interfaces/types";
 
 export const modules: ModulesProps[] = [
   {

@@ -1,4 +1,4 @@
-import { LoginCredentials, SignupCredentials } from "../lib/types";
+import { LoginCredentials, SignupCredentials } from "../interfaces/types";
 import { api } from "../services/api";
 import { toastError, toastSuccess } from "./toaster";
 

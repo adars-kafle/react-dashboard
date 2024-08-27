@@ -1,3 +1,5 @@
+import { MRT_Row } from "material-react-table";
+
 export interface User {
   id: number;
   name: string;
@@ -36,6 +38,12 @@ export type Supplier = {
   email: string;
   phone: string;
 };
+
+export interface SuppliersTableProps {
+  data: Supplier[];
+  onEditSupplier: (supplier: Supplier) => void;
+  onDeleteSupplier: (row: MRT_Row<Supplier>) => void;
+}
 
 export type ModulesProps = {
   title: string;

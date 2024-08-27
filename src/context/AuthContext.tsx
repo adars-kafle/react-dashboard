@@ -1,5 +1,8 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { type User, type AuthContext as AuthContextType } from "../lib/types";
+import {
+  type User,
+  type AuthContext as AuthContextType,
+} from "../interfaces/types";
 import { getCurrentUser as getCurrentUserApi } from "../utils/auth";
 
 // Create the context

@@ -1,4 +1,4 @@
-import { Supplier } from "../lib/types";
+import { Supplier } from "../interfaces/types";
 
 export const dummyData: Supplier[] = [
   {

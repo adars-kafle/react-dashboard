@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
-import { Supplier, SupplierFormInputs } from "../../lib/types";
+import { Supplier, SupplierFormInputs } from "../../interfaces/types";
 import { dummyData } from "../../services/suppliersData";
 import SuppliersHeader from "./components/SupplierHeader";
 import SupplierActions from "./components/SupplierActions";

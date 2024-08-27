@@ -1,18 +1,11 @@
 import React, { useMemo } from "react";
-import {
-  MaterialReactTable,
-  type MRT_ColumnDef,
-  type MRT_Row,
-} from "material-react-table";
+import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
 import { Box, IconButton } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import { Supplier } from "../../../lib/types";
-
-interface SuppliersTableProps {
-  data: Supplier[];
-  onEditSupplier: (supplier: Supplier) => void;
-  onDeleteSupplier: (row: MRT_Row<Supplier>) => void;
-}
+import {
+  type Supplier,
+  type SuppliersTableProps,
+} from "../../../interfaces/types";
 
 const SuppliersTable: React.FC<SuppliersTableProps> = ({
   data,

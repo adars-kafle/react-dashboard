@@ -10,7 +10,7 @@ import {
 import {
   type AddSupplierModalProps,
   type SupplierFormInputs,
-} from "../../../lib/types";
+} from "../../../interfaces/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supplierSchema } from "../../../schemas/supplierSchema";
