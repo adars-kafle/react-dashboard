@@ -1,25 +1,13 @@
-import React, { lazy, Suspense, useMemo, useState } from "react";
-import {
-  MaterialReactTable,
-  type MRT_ColumnDef,
-  type MRT_Row,
-} from "material-react-table";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import {
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Add as AddIcon,
-} from "@mui/icons-material";
+import React, { lazy, Suspense, useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
 import { Supplier, SupplierFormInputs } from "../../lib/types";
 import { dummyData } from "../../services/suppliersData";
+import SuppliersHeader from "./components/SupplierHeader";
+import SupplierActions from "./components/SupplierActions";
+import SuppliersTable from "./components/SupplierTable";
+import { MRT_Row } from "material-react-table";
 
-const SupplierModal = lazy(() => import("./components/SupplierModal"));
+const SupplierModal = lazy(() => import("./components/SupplierModal")); // For import optimization
 
 const SuppliersPage: React.FC = () => {
   const [data, setData] = useState<Supplier[]>(dummyData);
@@ -67,103 +55,15 @@ const SuppliersPage: React.FC = () => {
     }
   };
 
-  const columns = useMemo<MRT_ColumnDef<Supplier>[]>(
-    () => [
-      {
-        accessorKey: "id",
-        header: "S.N.",
-        size: 60,
-      },
-      {
-        accessorKey: "name",
-        header: "Supplier Name",
-      },
-      {
-        accessorKey: "address",
-        header: "Address",
-      },
-      {
-        accessorKey: "email",
-        header: "Email",
-      },
-      {
-        accessorKey: "phone",
-        header: "Phone",
-      },
-    ],
-    []
-  );
-
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Suppliers
-      </Typography>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mb: 2 }}>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenModal()}
-        >
-          Add Supplier
-        </Button>
-      </Box>
-      <MaterialReactTable
-        columns={columns}
+      <SuppliersHeader />
+      <SupplierActions onAddSupplier={handleOpenModal} />
+      <SuppliersTable
         data={data}
-        enableRowActions
-        positionActionsColumn="last"
-        renderRowActions={({ row }) => (
-          <Box sx={{ display: "flex", gap: "8px" }}>
-            <IconButton
-              onClick={() => handleOpenModal(row.original)}
-              size="small"
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              onClick={() => handleDeleteSupplier(row)}
-              size="small"
-              color="error"
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        )}
-        enableColumnActions={false}
-        enableColumnFilters={false}
-        enablePagination={true}
-        enableSorting={true}
-        enableTopToolbar={true}
-        enableBottomToolbar={true}
-        muiTableBodyRowProps={{ hover: true }}
-        muiTableProps={{
-          sx: {
-            tableLayout: "fixed",
-          },
-        }}
-        muiTableHeadCellProps={{
-          sx: {
-            borderRight: "1px solid rgba(224, 224, 224, 1)",
-            "&:last-child": {
-              borderRight: "none",
-            },
-          },
-        }}
-        muiTableBodyCellProps={{
-          sx: {
-            borderRight: "1px solid rgba(224, 224, 224, 1)",
-            "&:last-child": {
-              borderRight: "none",
-            },
-          },
-        }}
-        initialState={{
-          density: "compact",
-          pagination: { pageSize: 10, pageIndex: 0 },
-        }}
+        onEditSupplier={handleOpenModal}
+        onDeleteSupplier={handleDeleteSupplier}
       />
-
       <Suspense fallback={<CircularProgress />}>
         <SupplierModal
           open={modalOpen}

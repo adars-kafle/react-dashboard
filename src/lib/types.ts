@@ -37,6 +37,12 @@ export type Supplier = {
   phone: string;
 };
 
+export type ModulesProps = {
+  title: string;
+  description: string;
+  href: string;
+};
+
 export type AuthContext = {
   user: User | null;
 };
