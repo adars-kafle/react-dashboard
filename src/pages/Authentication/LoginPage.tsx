@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
-import { LoginCredentials } from "../../lib/types";
+import { LoginCredentials } from "../../interfaces/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schemas/authSchema";
 import { login } from "../../utils/auth";

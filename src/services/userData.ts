@@ -1,4 +1,4 @@
-import { User } from "../lib/types";
+import { User } from "../interfaces/types";
 
 export const mockUsers: User[] = [
   {
@@ -7,5 +7,10 @@ export const mockUsers: User[] = [
     email: "adars@varicon.com.au",
     password: "Varicon@pa55",
   },
-  { id: 2, name: "Admin User", email: "admin@gmail.com", password: "Admin@1234" },
+  {
+    id: 2,
+    name: "Admin User",
+    email: "admin@gmail.com",
+    password: "Admin@1234",
+  },
 ];

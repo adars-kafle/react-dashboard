@@ -2,7 +2,7 @@ import {
   type User,
   type LoginCredentials,
   type SignupCredentials,
-} from "../lib/types";
+} from "../interfaces/types";
 import { mockUsers } from "./userData";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

@@ -2,25 +2,7 @@ import React from "react";
 import { Container, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { StyledModuleBox } from "./styles";
-
-type ModulesProps = {
-  title: string;
-  description: string;
-  href: string;
-};
-
-const modules: ModulesProps[] = [
-  {
-    title: "Suppliers",
-    description: "Manage the suppliers for the system.",
-    href: "/suppliers",
-  },
-  {
-    title: "Users",
-    description: "Manage the users in the system.",
-    href: "/users",
-  },
-];
+import { modules } from "../../constants/modules";
 
 const DashboardPage: React.FC = () => {
   return (
