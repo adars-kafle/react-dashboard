@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../../schemas/authSchema";
 import { signup } from "../../utils/auth";
 
-export const SignupPage: React.FC = () => {
+const SignupPage: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -106,3 +106,5 @@ export const SignupPage: React.FC = () => {
     </Container>
   );
 };
+
+export default SignupPage;

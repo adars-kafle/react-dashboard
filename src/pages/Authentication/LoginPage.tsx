@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schemas/authSchema";
 import { login } from "../../utils/auth";
 
-export const LoginPage: React.FC = () => {
+const LoginPage: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -95,3 +95,5 @@ export const LoginPage: React.FC = () => {
     </Container>
   );
 };
+
+export default LoginPage;
