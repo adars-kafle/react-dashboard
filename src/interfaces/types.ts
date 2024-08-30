@@ -1,4 +1,16 @@
+import { ComponentType, LazyExoticComponent, ReactNode } from "react";
 import { MRT_Row } from "material-react-table";
+
+type RouteElement =
+  | ComponentType<any>
+  | LazyExoticComponent<ComponentType<any>>;
+
+export interface RoutesConfig {
+  path?: string;
+  element?: RouteElement;
+  layout?: ComponentType<{ children: React.ReactNode }>;
+  children?: RoutesConfig[];
+}
 
 export interface User {
   id: number;
@@ -43,6 +55,14 @@ export interface SuppliersTableProps {
   data: Supplier[];
   onEditSupplier: (supplier: Supplier) => void;
   onDeleteSupplier: (row: MRT_Row<Supplier>) => void;
+}
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+export interface ErrorBoundaryProps {
+  children: ReactNode;
 }
 
 export type ModulesProps = {

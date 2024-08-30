@@ -1,11 +1,11 @@
-import React, { lazy, Suspense, useState } from "react";
-import { Box, CircularProgress } from "@mui/material";
+import React, { lazy, useState } from "react";
 import { Supplier, SupplierFormInputs } from "../../interfaces/types";
 import { dummyData } from "../../services/suppliersData";
 import SuppliersHeader from "./components/SupplierHeader";
 import SupplierActions from "./components/SupplierActions";
 import SuppliersTable from "./components/SupplierTable";
 import { MRT_Row } from "material-react-table";
+import { Box } from "@mui/material";
 
 const SupplierModal = lazy(() => import("./components/SupplierModal")); // For import optimization
 
@@ -16,7 +16,7 @@ const SuppliersPage: React.FC = () => {
   const [currentSupplier, setCurrentSupplier] = useState<Supplier | null>(null);
 
   const handleOpenModal = (supplier?: Supplier) => {
-    if (supplier) {
+    if (supplier?.id && supplier?.email) {
       setCurrentSupplier(supplier);
       setIsEditing(true);
     } else {
@@ -64,17 +64,15 @@ const SuppliersPage: React.FC = () => {
         onEditSupplier={handleOpenModal}
         onDeleteSupplier={handleDeleteSupplier}
       />
-      <Suspense fallback={<CircularProgress />}>
-        <SupplierModal
-          open={modalOpen}
-          isEditing={isEditing}
-          supplier={
-            currentSupplier || { name: "", address: "", email: "", phone: "" }
-          }
-          onClose={handleCloseModal}
-          onSave={handleSaveSupplier}
-        />
-      </Suspense>
+      <SupplierModal
+        open={modalOpen}
+        isEditing={isEditing}
+        supplier={
+          currentSupplier || { name: "", address: "", email: "", phone: "" }
+        }
+        onClose={handleCloseModal}
+        onSave={handleSaveSupplier}
+      />
     </Box>
   );
 };
