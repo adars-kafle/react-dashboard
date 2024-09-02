@@ -12,6 +12,16 @@ export interface RoutesConfig {
   children?: RoutesConfig[];
 }
 
+export interface AppBarProps {
+  open: boolean;
+  handleDrawerOpen: () => void;
+}
+
+export interface DrawerProps {
+  open: boolean;
+  handleDrawerClose: () => void;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -32,6 +42,10 @@ export interface AddSupplierModalProps {
   supplier: Supplier | Omit<Supplier, "id">;
   onClose: () => void;
   onSave: (data: SupplierFormInputs) => void;
+}
+
+export interface SupplierActionsProps {
+  onAddSupplier: () => void;
 }
 
 export interface LoginCredentials {
@@ -71,6 +85,16 @@ export type ModulesProps = {
   href: string;
 };
 
-export type AuthContext = {
+export interface AuthContextType {
   user: User | null;
-};
+  isLoading: boolean;
+  setUser: (user: User | null) => void;
+  login: (credentials: LoginCredentials) => Promise<LoginResponse>;
+  signup: (credentials: SignupCredentials) => Promise<{ user: User }>;
+  logout: () => Promise<void>;
+  refetchUser: () => Promise<void>;
+}
+export interface LoginResponse {
+  message: string;
+  user: User;
+}
