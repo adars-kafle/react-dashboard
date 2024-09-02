@@ -33,9 +33,13 @@ const SupplierModal: React.FC<AddSupplierModalProps> = ({
     defaultValues: supplier,
   });
 
+  // This side effect runs when the supplier or setValue dependencies change.
   useEffect(() => {
     if (supplier) {
+      // It converts the supplier object into an array of key-value pairs.
+      // Then, the forEach loop iterates over these pairs.
       Object.entries(supplier).forEach(([key, value]) => {
+        // this populates the form fields with the values from the supplier object whenever the supplier changes.
         setValue(key as keyof SupplierFormInputs, value as string);
       });
     }

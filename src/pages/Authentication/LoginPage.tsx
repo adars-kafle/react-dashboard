@@ -12,7 +12,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { LoginCredentials } from "../../interfaces/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schemas/authSchema";
-import { login } from "../../utils/auth";
+import { toastError, toastSuccess } from "../../utils/toaster";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginPage: React.FC = () => {
   const {
@@ -23,14 +24,18 @@ const LoginPage: React.FC = () => {
     resolver: zodResolver(loginSchema),
   });
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onSubmit = async (data: LoginCredentials) => {
-    await login(data)
-      .then((response) => {
-        console.log("Response: ", response);
-        navigate("/");
-      })
-      .catch((err) => console.log("Error: ", err));
+    try {
+      const response = await login(data);
+      console.log("RESPONSE: ", response);
+      toastSuccess("Logged in successfully!");
+      navigate("/");
+    } catch (err) {
+      toastError("Invalid email or password!");
+      console.log("Error: ", err);
+    }
   };
 
   return (
@@ -59,7 +64,6 @@ const LoginPage: React.FC = () => {
             id="email"
             label="Email Address"
             type="email"
-            value={"admin@gmail.com"}
             autoComplete="email"
             autoFocus
             {...register("email")}
@@ -72,7 +76,6 @@ const LoginPage: React.FC = () => {
             fullWidth
             id="password"
             label="Password"
-            value={"Admin@1234"}
             type="password"
             autoComplete="current-password"
             {...register("password")}

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Button,
@@ -8,32 +9,39 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { SignupCredentials } from "../../interfaces/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useAuth } from "../../hooks/useAuth";
+import { SignupCredentials } from "../../interfaces/types";
 import { signupSchema } from "../../schemas/authSchema";
-import { signup } from "../../utils/auth";
+import { toastError, toastSuccess } from "../../utils/toaster";
+import { Loader } from "../../components/Loading";
 
 const SignupPage: React.FC = () => {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm<SignupCredentials>({
     resolver: zodResolver(signupSchema),
   });
 
-  console.log("erros", errors);
-  console.log("consoe", getValues("email"));
   const navigate = useNavigate();
+  const { signup, isLoading } = useAuth();
 
   const onSubmit = async (data: SignupCredentials) => {
-    await signup(data)
-      .then((response) => {
-        console.log("Response: ", response);
-        navigate("/login");
-      })
-      .catch((error) => console.log(error));
+    try {
+      await signup(data);
+      toastSuccess("Signed up successfully!");
+      navigate("/login");
+    } catch (error) {
+      if (error instanceof Error) {
+        toastError(error.message);
+      } else {
+        toastError("An unexpected error occurred");
+      }
+      console.error(error);
+    }
   };
 
   return (
@@ -96,7 +104,7 @@ const SignupPage: React.FC = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            {isLoading ? <Loader size={24} /> : "Sign Up"}
           </Button>
           <MuiLink component={Link} to="/login" variant="body2">
             {"Already have an account? Sign In"}
