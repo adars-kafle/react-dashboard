@@ -6,6 +6,7 @@ import {
   type SignupCredentials,
 } from "../interfaces/types";
 import { authApi } from "../services/authServices";
+import { devError, devLog } from "../utils/devLogger";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
@@ -25,6 +26,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true);
     try {
       const response = await authApi.getCurrentUser(); // send api request to get the current user
+      devLog("USER is: ", response); // Using devLog instead of console.log
       if (response) {
         setUser(response);
         localStorage.setItem("user", JSON.stringify(response)); // store the user info in local storage
@@ -33,7 +35,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         localStorage.removeItem("user");
       }
     } catch (error) {
-      console.log("Error fetching user: ", error);
+      devError("Error fetching user: ", error);
       setUser(null);
       localStorage.removeItem("user");
     } finally {
@@ -49,8 +51,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true);
     try {
       const response = await authApi.login(credentials);
+      devLog("LOGIN RESPONE: ", response);
       await fetchUser(); // If the login is successful, fetch the user info.
       return response;
+    } catch (error) {
+      devError("Error logging in: ", error);
+      throw new Error(`Error logging in: ${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -60,8 +66,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true);
     try {
       const response = await authApi.signup(credentials);
+      devLog("SIGNUP RESPONSE: ", response);
       await fetchUser(); // Fetch user data after successful signup
       return response;
+    } catch (error) {
+      devError("Error signing up: ", error);
+      throw new Error(`Error signing up: ${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +84,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setUser(null); // remove the user info from the state
       localStorage.removeItem("user"); // remove the user info from the local storage
     } catch (error) {
-      console.log("Error logging out: ", error);
+      devError("Error logging out: ", error);
     } finally {
       setIsLoading(false);
     }
