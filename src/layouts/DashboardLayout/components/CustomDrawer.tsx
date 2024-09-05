@@ -5,11 +5,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Drawer, DrawerHeader } from "../styles";
 import MenuItems from "./MenuItems";
-
-interface DrawerProps {
-  open: boolean;
-  handleDrawerClose: () => void;
-}
+import { DrawerProps } from "../../../interfaces/types";
 
 const DrawerComponent: React.FC<DrawerProps> = ({
   open,

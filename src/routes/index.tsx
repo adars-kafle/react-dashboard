@@ -7,8 +7,8 @@ import {
 } from "react-router-dom";
 import { type RoutesConfig } from "../interfaces/types";
 import routeConfig from "./routesConfig";
-import { ErrorBoundary } from "../components/ErrorBoundary";
-import { Loader } from "../components/Loading";
+import ErrorBoundary from "../components/ErrorBoundary";
+import Loader from "../components/Loading";
 
 const renderRoutes = (routes: RoutesConfig[]): ReactElement[] => {
   return routes.map((route, i) => {

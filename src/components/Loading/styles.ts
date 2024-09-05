@@ -1,7 +1,4 @@
-import React from "react";
-import { Box, CircularProgress, CircularProgressProps } from "@mui/material";
-
-const styles = {
+export const styles = {
   box: {
     display: "flex",
     justifyContent: "center",
@@ -27,22 +24,4 @@ const styles = {
     thickness: 4,
     value: 100,
   },
-};
-
-export const Loader: React.FC<CircularProgressProps> = (props) => {
-  return (
-    <Box sx={styles.box}>
-      <CircularProgress
-        variant="indeterminate"
-        disableShrink
-        sx={styles.circularProgressFirst}
-        {...props}
-      />
-      <CircularProgress
-        variant="determinate"
-        sx={styles.circularProgressSecond}
-        {...props}
-      />
-    </Box>
-  );
 };

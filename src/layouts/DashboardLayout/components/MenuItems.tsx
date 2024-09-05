@@ -6,20 +6,11 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+
 import { useTheme } from "@mui/material/styles";
+import { menuItems } from "../../../constants/dashboardMenuItems";
 
-const menuItems = [
-  { text: "Dashboard", icon: <DashboardIcon />, path: "/" },
-  { text: "Suppliers", icon: <LocalShippingIcon />, path: "/suppliers" },
-];
-
-interface MenuItemsProps {
-  open: boolean;
-}
-
-const MenuItems: React.FC<MenuItemsProps> = ({ open }) => {
+const MenuItems: React.FC<{ open: boolean }> = ({ open }) => {
   const location = useLocation();
   const theme = useTheme();
 

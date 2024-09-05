@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import { ErrorBoundaryProps, ErrorBoundaryState } from "../interfaces/types";
+import { ErrorBoundaryProps, ErrorBoundaryState } from "../../interfaces/types";
 
-export class ErrorBoundary extends Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -28,3 +25,5 @@ export class ErrorBoundary extends Component<
     return this.props.children;
   }
 }
+
+export default ErrorBoundary;

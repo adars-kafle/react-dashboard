@@ -1,23 +1,28 @@
 import React, { useMemo } from "react";
 import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, useTheme } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import {
   type Supplier,
   type SuppliersTableProps,
 } from "../../../interfaces/types";
+import { getSupplierTableStyles } from "./supplierTableStyles";
 
 const SuppliersTable: React.FC<SuppliersTableProps> = ({
   data,
   onEditSupplier,
   onDeleteSupplier,
 }) => {
+  const theme = useTheme();
+  const styles = getSupplierTableStyles(theme);
+
   const columns = useMemo<MRT_ColumnDef<Supplier>[]>(
     () => [
       {
         accessorKey: "id",
         header: "S.N.",
         size: 60,
+        Cell: ({ row }) => row.index + 1,
       },
       {
         accessorKey: "name",
@@ -65,30 +70,12 @@ const SuppliersTable: React.FC<SuppliersTableProps> = ({
       enableSorting={true}
       enableTopToolbar={true}
       enableBottomToolbar={true}
-      muiTableBodyRowProps={{ hover: true }}
-      muiTableProps={{
-        sx: {
-          tableLayout: "fixed",
-        },
-      }}
-      muiTableHeadCellProps={{
-        sx: {
-          borderRight: "1px solid rgba(224, 224, 224, 1)",
-          "&:last-child": {
-            borderRight: "none",
-          },
-        },
-      }}
-      muiTableBodyCellProps={{
-        sx: {
-          borderRight: "1px solid rgba(224, 224, 224, 1)",
-          "&:last-child": {
-            borderRight: "none",
-          },
-        },
-      }}
+      muiTableBodyRowProps={styles.tableBodyRow}
+      muiTableProps={styles.tableProps}
+      muiTableBodyCellProps={styles.tableBodyCell}
+      muiTableHeadCellProps={styles.tableHeadCell}
       initialState={{
-        density: "compact",
+        density: "comfortable",
         pagination: { pageSize: 10, pageIndex: 0 },
       }}
     />
