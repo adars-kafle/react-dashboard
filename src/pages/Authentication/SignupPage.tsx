@@ -15,7 +15,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { SignupCredentials } from "../../interfaces/types";
 import { signupSchema } from "../../schemas/authSchema";
 import { toastError, toastSuccess } from "../../utils/toaster";
-import { Loader } from "../../components/Loading";
+import Loader from "../../components/Loading";
 
 const SignupPage: React.FC = () => {
   const {
