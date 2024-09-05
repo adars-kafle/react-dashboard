@@ -7,10 +7,7 @@ export const loginSchema = z.object({
     .string()
     .min(1, errorMessages.email.required)
     .email(errorMessages.email.validity),
-  password: z
-    .string()
-    .min(1, errorMessages.password.required)
-    .regex(regex.password, errorMessages.password.validity),
+  password: z.string().min(1, errorMessages.password.required),
 });
 
 export const signupSchema = z.object({
