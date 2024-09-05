@@ -1,10 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supplierApi } from "../services/supplierServices";
 import { type SupplierFormInputs } from "../interfaces/types";
+import { SUPPLIER_KEY } from "../config/keys";
 
 export const useSuppliers = (skip: number = 0, limit: number = 10) => {
   return useQuery({
-    queryKey: ["suppliers", skip, limit], // this array uniquely identifies the query.
+    queryKey: [SUPPLIER_KEY, skip, limit], // this array uniquely identifies the query.
     queryFn: () => supplierApi.getSuppliers(skip, limit), // this function fetches the data from the API.
     staleTime: 5 * 60 * 1000, // after 5 minutes, the data is considered stale and is refetched from the API.
   });
@@ -12,7 +13,7 @@ export const useSuppliers = (skip: number = 0, limit: number = 10) => {
 
 export const useSupplier = (id: string) => {
   return useQuery({
-    queryKey: ["supplier", id],
+    queryKey: [SUPPLIER_KEY, id],
     queryFn: () => supplierApi.getSupplierById(id),
     enabled: !!id, // this ensures the query is only executed if `id` is not undefined or null.
     staleTime: 5 * 60 * 1000, // 5 minutes of stale time
@@ -26,7 +27,7 @@ export const useCreateSupplier = () => {
     mutationFn: (newSupplier: SupplierFormInputs) =>
       supplierApi.createSupplier(newSupplier), // this function creates a new supplier (it mutates/changes the data)
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["suppliers"] }); // this tells react query to refetch the data from the API.
+      queryClient.invalidateQueries({ queryKey: [SUPPLIER_KEY] }); // this tells react query to refetch the data from the API.
     },
   });
 };
@@ -43,9 +44,9 @@ export const useUpdateSupplier = () => {
       updates: SupplierFormInputs;
     }) => supplierApi.updateSupplier(id, updates),
     onSuccess: (updatedSupplier) => {
-      queryClient.invalidateQueries({ queryKey: ["suppliers"] });
+      queryClient.invalidateQueries({ queryKey: [SUPPLIER_KEY] });
       queryClient.setQueryData(
-        ["supplier", updatedSupplier.id],
+        [SUPPLIER_KEY, updatedSupplier.id],
         updatedSupplier
       );
     },
@@ -58,8 +59,8 @@ export const useDeleteSupplier = () => {
   return useMutation({
     mutationFn: (id: string) => supplierApi.deleteSupplier(id),
     onSuccess: (_, deletedId) => {
-      queryClient.invalidateQueries({ queryKey: ["suppliers"] });
-      queryClient.removeQueries({ queryKey: ["supplier", deletedId] });
+      queryClient.invalidateQueries({ queryKey: [SUPPLIER_KEY] });
+      queryClient.removeQueries({ queryKey: [SUPPLIER_KEY, deletedId] });
     },
   });
 };
