@@ -52,8 +52,13 @@ const SupplierModal: React.FC<AddSupplierModalProps> = ({
     onClose();
   };
 
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>
         {isEditing ? "Edit Supplier" : "Add New Supplier"}
       </DialogTitle>
@@ -102,7 +107,7 @@ const SupplierModal: React.FC<AddSupplierModalProps> = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button type="submit" variant="contained">
             {isEditing ? "Update" : "Add"}
           </Button>
