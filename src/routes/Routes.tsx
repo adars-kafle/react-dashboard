@@ -6,7 +6,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import { type RoutesConfig } from "../interfaces/routes";
-import routeConfig from "./appRoutes";
+import routeConfig from "../config/routes";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Loader from "../components/Loading";
 
