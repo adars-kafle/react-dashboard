@@ -4,7 +4,7 @@ import {
   type AuthContextType,
   type LoginCredentials,
   type SignupCredentials,
-} from "../interfaces/types";
+} from "../interfaces/auth";
 import { authApi } from "../services/authServices";
 import { devError, devLog } from "../utils/devLogger";
 import { USER_KEY } from "../constants/keys";
