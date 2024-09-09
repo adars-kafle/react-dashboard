@@ -2,7 +2,7 @@ import React from "react";
 
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { RoutesConfig } from "../interfaces/types";
+import { type RoutesConfig } from "../interfaces/routes";
 
 const LoginPage = React.lazy(() => import("../pages/Authentication/LoginPage"));
 const SignupPage = React.lazy(
