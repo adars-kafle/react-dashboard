@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { AppBar } from "../styles";
 import { useAuth } from "../../../hooks/useAuth";
 import { toastError, toastSuccess } from "../../../utils/toaster";
-import { AppBarProps } from "../../../interfaces/types";
+import { type AppBarProps } from "../../../interfaces/ui";
 
 const AppBarComponent: React.FC<AppBarProps> = ({ open, handleDrawerOpen }) => {
   const navigate = useNavigate();
