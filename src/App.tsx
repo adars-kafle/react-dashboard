@@ -5,7 +5,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme/theme";
-import Routes from "./routes";
+import Routes from "./routes/Routes";
 
 const queryClient = new QueryClient();
 
