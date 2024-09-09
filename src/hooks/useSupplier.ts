@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supplierApi } from "../services/supplierServices";
 import { type SupplierFormInputs } from "../interfaces/types";
-import { SUPPLIER_KEY } from "../config/keys";
+import { SUPPLIER_KEY } from "../constants/keys";
 
 export const useSuppliers = (skip: number = 0, limit: number = 10) => {
   return useQuery({
