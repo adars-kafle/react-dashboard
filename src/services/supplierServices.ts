@@ -1,5 +1,5 @@
 import api from "./api";
-import { Supplier, SupplierFormInputs } from "../interfaces/types";
+import { type Supplier, type SupplierFormInputs } from "../interfaces/supplier";
 import { handleApiError } from "../utils/errorHandlers";
 
 export const supplierApi = {

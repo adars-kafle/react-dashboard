@@ -4,7 +4,7 @@ import {
   type LoginCredentials,
   type SignupCredentials,
   type LoginResponse,
-} from "../interfaces/types";
+} from "../interfaces/auth";
 import { handleApiError } from "../utils/errorHandlers";
 
 export const authApi = {
