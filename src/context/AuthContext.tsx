@@ -7,6 +7,9 @@ import {
 } from "../interfaces/types";
 import { authApi } from "../services/authServices";
 import { devError, devLog } from "../utils/devLogger";
+import { USER_KEY } from "../constants/keys";
+import { getItem, removeItem, setItem } from "../utils/storage";
+import { parseJson, stringifyJson } from "../utils/json";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
@@ -16,8 +19,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+    const storedUser = getItem<string>(USER_KEY);
+    return storedUser ? parseJson<User>(storedUser) : null;
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,15 +32,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       devLog("USER is: ", response); // Using devLog instead of console.log
       if (response) {
         setUser(response);
-        localStorage.setItem("user", JSON.stringify(response)); // store the user info in local storage
+        setItem(USER_KEY, stringifyJson(response)); // store the user info in local storage
       } else {
         setUser(null);
-        localStorage.removeItem("user");
+        removeItem(USER_KEY);
       }
     } catch (error) {
       devError("Error fetching user: ", error);
       setUser(null);
-      localStorage.removeItem("user");
+      removeItem(USER_KEY);
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       await authApi.logout(); // Logout the user
       setUser(null); // remove the user info from the state
-      localStorage.removeItem("user"); // remove the user info from the local storage
+      removeItem(USER_KEY); // remove the user info from the local storage
     } catch (error) {
       devError("Error logging out: ", error);
     } finally {
