@@ -8,7 +8,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 
 import { useTheme } from "@mui/material/styles";
-import { menuItems } from "../../../constants/dashboardMenuItems";
+import { menuItems } from "../../../../constants/dashboardMenuItems";
 
 const MenuItems: React.FC<{ open: boolean }> = ({ open }) => {
   const location = useLocation();

@@ -2,10 +2,8 @@ import React, { useMemo } from "react";
 import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
 import { Box, IconButton, useTheme } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import {
-  type Supplier,
-  type SuppliersTableProps,
-} from "../../../interfaces/types";
+import { type Supplier } from "../../../interfaces/supplier";
+import { type SuppliersTableProps } from "../../../interfaces/ui";
 import { getSupplierTableStyles } from "./supplierTableStyles";
 
 const SuppliersTable: React.FC<SuppliersTableProps> = ({

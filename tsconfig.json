@@ -5,8 +5,11 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "baseUrl": ".",
+    "types": ["node"],
     "paths": {
-      "@mui/x-date-pickers/*": ["./node_modules/@mui/x-date-pickers/*"]
+      "@/*": ["src/*"]
+      //   "@mui/x-date-pickers/*": ["./node_modules/@mui/x-date-pickers/*"]
     }
   }
 }

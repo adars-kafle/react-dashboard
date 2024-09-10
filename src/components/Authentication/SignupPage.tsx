@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useAuth } from "../../hooks/useAuth";
-import { SignupCredentials } from "../../interfaces/types";
+import { type SignupCredentials } from "../../interfaces/auth";
 import { signupSchema } from "../../schemas/authSchema";
 import { toastError, toastSuccess } from "../../utils/toaster";
 import Loader from "../../components/Loading";

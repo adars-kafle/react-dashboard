@@ -1,16 +1,14 @@
-import React from "react";
-
 import { ProtectedRoute } from "../components/ProtectedRoute";
-import DashboardLayout from "../layouts/DashboardLayout";
-import { RoutesConfig } from "../interfaces/types";
+import DashboardLayout from "../components/Layouts/DashboardLayout";
+import { type RoutesConfig } from "../interfaces/routes";
 
-const LoginPage = React.lazy(() => import("../pages/Authentication/LoginPage"));
-const SignupPage = React.lazy(
-  () => import("../pages/Authentication/SignupPage")
-);
-const DashboardPage = React.lazy(() => import("../pages/Dashboard"));
-const SuppliersPage = React.lazy(() => import("../pages/Suppliers"));
-const NotFoundPage = React.lazy(() => import("../pages/NotFound"));
+import {
+  LoginPage,
+  SignupPage,
+  DashboardPage,
+  SuppliersPage,
+  NotFoundPage,
+} from "../components/LazyComponents";
 
 // Define route configuration
 const routeConfig: RoutesConfig[] = [

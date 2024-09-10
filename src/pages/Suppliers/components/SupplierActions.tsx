@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
-import { SupplierActionsProps } from "../../../interfaces/types";
+import { type SupplierActionsProps } from "../../../interfaces/ui";
 
 const SupplierActions: React.FC<SupplierActionsProps> = ({ onAddSupplier }) => {
   return (

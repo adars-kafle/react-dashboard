@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Supplier, SupplierFormInputs } from "../interfaces/types";
+import { type Supplier, type SupplierFormInputs } from "../interfaces/supplier";
 import { useCreateSupplier, useUpdateSupplier } from "./useSupplier";
 import { toastSuccess, toastError } from "../utils/toaster";
 

@@ -1,7 +1,7 @@
 import React, { lazy } from "react";
 import { Box, Typography } from "@mui/material";
 import { MRT_Row } from "material-react-table";
-import { Supplier } from "../../interfaces/types";
+import { type Supplier } from "../../interfaces/supplier";
 import SuppliersHeader from "./components/SupplierHeader";
 import SupplierActions from "./components/SupplierActions";
 import SuppliersTable from "./components/SupplierTable";
