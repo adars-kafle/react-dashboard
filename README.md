@@ -10,7 +10,7 @@ This project is a simple supplier management system built with React, TypeScript
 ### Directory Structure
 
 ```
-varicon-react/
+react-dashboard/
 ├── public/
 │   └── vite.svg
 ├── src/
