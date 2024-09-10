@@ -1,6 +1,7 @@
 import api from "./api";
 import { type Supplier, type SupplierFormInputs } from "../interfaces/supplier";
 import { handleApiError } from "../utils/errorHandlers";
+import { ENDPOINTS } from "../config/api";
 
 export const supplierApi = {
   getSuppliers: async (
@@ -9,7 +10,7 @@ export const supplierApi = {
   ): Promise<Supplier[]> => {
     try {
       const response = await api.get<Supplier[]>(
-        `/suppliers?skip=${skip}&limit=${limit}`
+        `${ENDPOINTS.SUPPLIERS}?skip=${skip}&limit=${limit}`
       );
       return response.data;
     } catch (error) {
@@ -19,7 +20,7 @@ export const supplierApi = {
 
   getSupplierById: async (id: string): Promise<Supplier> => {
     try {
-      const response = await api.get<Supplier>(`/suppliers/${id}`);
+      const response = await api.get<Supplier>(`${ENDPOINTS.SUPPLIERS}/${id}`);
       return response.data;
     } catch (error) {
       throw handleApiError(error);
@@ -30,7 +31,10 @@ export const supplierApi = {
     supplierData: SupplierFormInputs
   ): Promise<Supplier> => {
     try {
-      const response = await api.post<Supplier>("/suppliers", supplierData);
+      const response = await api.post<Supplier>(
+        ENDPOINTS.SUPPLIERS,
+        supplierData
+      );
       return response.data;
     } catch (error) {
       throw handleApiError(error);
@@ -43,7 +47,7 @@ export const supplierApi = {
   ): Promise<Supplier> => {
     try {
       const response = await api.put<Supplier>(
-        `/suppliers/${id}`,
+        `${ENDPOINTS.SUPPLIERS}/${id}`,
         supplierData
       );
       return response.data;
@@ -54,7 +58,7 @@ export const supplierApi = {
 
   deleteSupplier: async (id: string): Promise<void> => {
     try {
-      await api.delete(`/suppliers/${id}`);
+      await api.delete(`${ENDPOINTS.SUPPLIERS}/${id}`);
     } catch (error) {
       throw handleApiError(error);
     }
