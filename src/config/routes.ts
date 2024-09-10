@@ -1,5 +1,5 @@
 import { ProtectedRoute } from "../components/ProtectedRoute";
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../components/Layouts/DashboardLayout";
 import { type RoutesConfig } from "../interfaces/routes";
 
 import {
