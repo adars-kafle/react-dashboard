@@ -6,12 +6,13 @@ import {
   type LoginResponse,
 } from "../interfaces/auth";
 import { handleApiError } from "../utils/errorHandlers";
+import { ENDPOINTS } from "../config/api";
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
     try {
       const response = await api.post<LoginResponse>(
-        "/auth/login",
+        ENDPOINTS.LOGIN,
         credentials
       );
       return response.data;
@@ -23,7 +24,7 @@ export const authApi = {
   signup: async (credentials: SignupCredentials): Promise<{ user: User }> => {
     try {
       const response = await api.post<{ user: User }>(
-        "/auth/signup",
+        ENDPOINTS.SIGNUP,
         credentials
       );
       return response.data;
@@ -34,7 +35,7 @@ export const authApi = {
 
   logout: async (): Promise<void> => {
     try {
-      await api.post("/auth/logout");
+      await api.post(ENDPOINTS.LOGOUT);
     } catch (error) {
       throw handleApiError(error);
     }
@@ -42,7 +43,7 @@ export const authApi = {
 
   getCurrentUser: async (): Promise<User | null> => {
     try {
-      const response = await api.get<User>("/user/me");
+      const response = await api.get<User>(ENDPOINTS.ME);
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
