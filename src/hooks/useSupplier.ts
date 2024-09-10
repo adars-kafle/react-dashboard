@@ -3,6 +3,8 @@ import { supplierApi } from "../services/supplierServices";
 import { type SupplierFormInputs } from "../interfaces/supplier";
 import { SUPPLIER_KEY } from "../constants/keys";
 
+const queryClient = useQueryClient();
+
 export const useSuppliers = (skip: number = 0, limit: number = 10) => {
   return useQuery({
     queryKey: [SUPPLIER_KEY, skip, limit], // this array uniquely identifies the query.
@@ -21,8 +23,6 @@ export const useSupplier = (id: string) => {
 };
 
 export const useCreateSupplier = () => {
-  const queryClient = useQueryClient(); // this is used to invalidate the cache.
-
   return useMutation({
     mutationFn: (newSupplier: SupplierFormInputs) =>
       supplierApi.createSupplier(newSupplier), // this function creates a new supplier (it mutates/changes the data)
@@ -33,8 +33,6 @@ export const useCreateSupplier = () => {
 };
 
 export const useUpdateSupplier = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({
       id,
@@ -54,8 +52,6 @@ export const useUpdateSupplier = () => {
 };
 
 export const useDeleteSupplier = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (id: string) => supplierApi.deleteSupplier(id),
     onSuccess: (_, deletedId) => {
